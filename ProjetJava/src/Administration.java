@@ -1,17 +1,18 @@
+//MEZGHICHE Alaa 
 public class Administration {
 
     private User[] users;
-    private Trip[] trips;
+    private trip[] trips;
     private int userCount;
     private int tripCount;
     private int maxUsers;
-    private int maxTrips;
+    private int maxtrips;
 
-    public Administration(int maxUsers, int maxTrips) {
+    public Administration(int maxUsers, int maxtrips) {
         this.maxUsers = maxUsers;
-        this.maxTrips = maxTrips;
+        this.maxtrips = maxtrips;
         this.users = new User[maxUsers];
-        this.trips = new Trip[maxTrips];
+        this.trips = new trip[maxtrips];
         this.userCount = 0;
         this.tripCount = 0;
     }
@@ -23,8 +24,8 @@ public class Administration {
         }
     }
 
-    public void addTrip(Trip t) {
-        if (tripCount < maxTrips && t != null) {
+    public void addtrip(trip t) {
+        if (tripCount < maxtrips && t != null) {
             trips[tripCount++] = t;
         }
     }
@@ -58,7 +59,7 @@ public class Administration {
         System.out.println("=== Users with reputation < 2 ===");
         for (int i = 0; i < userCount; i++) {
             if (users[i] != null && users[i].getReputation() < 2) {
-                System.out.println(users[i].getFullName() + " (" + users[i].getId() + ") - " + users[i].getReputation());
+                System.out.println(users[i].getLastName() + " (" + users[i].getId() + ") - " + users[i].getReputation());
             }
         }
     }
@@ -67,7 +68,7 @@ public class Administration {
         System.out.println("=== Banning low reputation users ===");
         for (int i = 0; i < userCount; i++) {
             if (users[i] != null && users[i].getReputation() < 2) {
-                System.out.println("Banned: " + users[i].getFullName());
+                System.out.println("Banned: " + users[i].getLastName());
                 users[i] = null;
             }
         }
@@ -97,13 +98,13 @@ public class Administration {
         System.out.println("=== Top 10 Drivers ===");
         for (int i = 0; i < cpt && i < 10; i++) {
             User u = drivers[i];
-            System.out.println((i + 1) + ". " + u.getFullName() + " - Reputation: " + u.getReputation());
+            System.out.println((i + 1) + ". " + u.getLastName() + " - Reputation: " + u.getReputation());
         }
     }
 
     // COURSES EN COURS
-    public void showOngoingTrips(String now) {
-        System.out.println("=== Ongoing Trips ===");
+    public void showOngoingtrips(String now) {
+        System.out.println("=== Ongoing trips ===");
         for (int i = 0; i < tripCount; i++) {
             if (trips[i] != null && trips[i].isInProgress(now)) {
                 trips[i].showTripInfo();
@@ -135,8 +136,8 @@ public class Administration {
     }
 
     // HISTORIQUE DES COURSES
-    public void showTripHistory() {
-        System.out.println("=== Trip History ===");
+    public void showtripHistory() {
+        System.out.println("=== trip History ===");
         for (int i = 0; i < tripCount; i++) {
             if (trips[i] != null && trips[i].isFinished()) {
                 trips[i].showTripInfo();
