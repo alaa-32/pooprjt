@@ -8,11 +8,11 @@ public class Staff extends User implements Role {
 
   @Override
   public void displayRoleInfo() {
-      System.out.println("Role: Staff");
-      System.out.println("Department: " + department);
+      System.out.println("Role : Staff");
+      System.out.println("Department : " + department);
   }
 
-  public interface Role {
-    String getRoleName();
+  public String getDepartment() {
+      return department;
   }
 }

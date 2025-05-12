@@ -1,4 +1,18 @@
 public class Passenger {
+
+    public boolean searchTrip(Trip trip, Itinerary preferredItinerary, Preferences preferredPreferences) {
+        return trip.getItinerary().getStartPoint().equals(preferredItinerary.getStartPoint()) &&
+               trip.getItinerary().getDropPoints().equals(preferredItinerary.getDropPoints()) &&
+               trip.getPreferences().getGenderPreference().equals(preferredPreferences.getGenderPreference()) &&
+               trip.getPreferences().isMusicAllowed() == preferredPreferences.isMusicAllowed() &&
+               trip.getPreferences().isBaggageAllowed() == preferredPreferences.isBaggageAllowed();
+    }
+}
+
+
+
+
+/*public class Passenger {
     private String name;
 
     public Passenger(String name) {
@@ -14,3 +28,4 @@ public class Passenger {
                trip.getPreferences().isBaggageAllowed() == preferredPreferences.isBaggageAllowed();
     }
 }
+*/

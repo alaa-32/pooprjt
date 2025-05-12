@@ -1,48 +1,70 @@
-//MEZGHICHE Alaa 
 public class Administration {
 
     private User[] users;
-    private trip[] trips;
+    private Trip[] trips;
     private int userCount;
     private int tripCount;
     private int maxUsers;
-    private int maxtrips;
+    private int maxTrips;
 
-    public Administration(int maxUsers, int maxtrips) {
+    public Administration(int maxUsers, int maxTrips) {
         this.maxUsers = maxUsers;
-        this.maxtrips = maxtrips;
+        this.maxTrips = maxTrips;
         this.users = new User[maxUsers];
-        this.trips = new trip[maxtrips];
+        this.trips = new Trip[maxTrips];
         this.userCount = 0;
         this.tripCount = 0;
     }
 
-    // AJOUTS
     public void addUser(User u) {
         if (userCount < maxUsers && u != null) {
             users[userCount++] = u;
         }
     }
 
-    public void addtrip(trip t) {
-        if (tripCount < maxtrips && t != null) {
+    public void addTrip(Trip t) {
+        if (tripCount < maxTrips && t != null) {
             trips[tripCount++] = t;
         }
     }
+   // voir  kaml les user
+    public void showAllUsers() {
+        System.out.println("=== Tous les utilisateurs ===");
+        for (int i = 0; i < userCount; i++) {
+            if (users[i] != null) {
+                System.out.println(users[i].getId() + " - " + users[i].getLastName() + " - Réputation : " + users[i].getReputation());
+            }
+        }
+    }
+    //active one 
+    public void showActiveUsersCount() {
+        int active = 0;
+        for (int i = 0; i < userCount; i++) {
+            if (users[i] != null) {
+                for (int j = 0; j < tripCount; j++) {
+                    if (trips[j] != null && 
+                        (trips[j].getDriver().equals(users[i]) || trips[j].hasPassenger(users[i]))) {
+                        active++;
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println("Nombre d'utilisateurs actifs : " + active);
+    }
+    
 
     // STATISTIQUES
     public void showStatistics() {
-        int students = 0, teachers = 0, staff = 0, drivers = 0, passengers = 0;
+        int students = 0, teachers = 0, staff = 0, drivers = 0  ;/*passengers = 0*/
+
         for (int i = 0; i < userCount; i++) {
             if (users[i] != null) {
-                String role = users[i].getRole();
-                switch (role) {
-                    case "Student": students++; break;
-                    case "Teacher": teachers++; break;
-                    case "Staff": staff++; break;
-                    case "Driver": drivers++; break;
-                    case "Passenger": passengers++; break;
-                }
+                if (users[i] instanceof Student) students++;
+                else if (users[i] instanceof Teacher) teachers++;
+                else if (users[i] instanceof Staff) staff++;
+                else if (users[i] instanceof Driver) drivers++;
+                // pas besoin de "Passenger" ici car c’est un rôle temporaire
             }
         }
 
@@ -51,10 +73,8 @@ public class Administration {
         System.out.println("Teachers   : " + teachers);
         System.out.println("Staff      : " + staff);
         System.out.println("Drivers    : " + drivers);
-        System.out.println("Passengers : " + passengers);
     }
 
-    // LISTE NOIRE
     public void showBlacklist() {
         System.out.println("=== Users with reputation < 2 ===");
         for (int i = 0; i < userCount; i++) {
@@ -74,19 +94,18 @@ public class Administration {
         }
     }
 
-    // TOP 10 CHAUFFEURS
     public void top10Drivers() {
         User[] drivers = new User[userCount];
-        int cpt = 0;
+        int count = 0;
 
         for (int i = 0; i < userCount; i++) {
-            if (users[i] != null && users[i].getRole().equals("Driver")) {
-                drivers[cpt++] = users[i];
+            if (users[i] != null && users[i] instanceof Driver) {
+                drivers[count++] = users[i];
             }
         }
 
-        for (int i = 0; i < cpt - 1; i++) {
-            for (int j = i + 1; j < cpt; j++) {
+        for (int i = 0; i < count - 1; i++) {
+            for (int j = i + 1; j < count; j++) {
                 if (drivers[i].getReputation() < drivers[j].getReputation()) {
                     User temp = drivers[i];
                     drivers[i] = drivers[j];
@@ -96,15 +115,14 @@ public class Administration {
         }
 
         System.out.println("=== Top 10 Drivers ===");
-        for (int i = 0; i < cpt && i < 10; i++) {
+        for (int i = 0; i < count && i < 10; i++) {
             User u = drivers[i];
             System.out.println((i + 1) + ". " + u.getLastName() + " - Reputation: " + u.getReputation());
         }
     }
 
-    // COURSES EN COURS
-    public void showOngoingtrips(String now) {
-        System.out.println("=== Ongoing trips ===");
+    public void showOngoingTrips(String now) {
+        System.out.println("=== Ongoing Trips ===");
         for (int i = 0; i < tripCount; i++) {
             if (trips[i] != null && trips[i].isInProgress(now)) {
                 trips[i].showTripInfo();
@@ -112,7 +130,6 @@ public class Administration {
         }
     }
 
-    // PLANNING JOURNALIER
     public void showDailyPlanning(String date) {
         System.out.println("=== Daily Planning for " + date + " ===");
         for (int i = 0; i < tripCount; i++) {
@@ -122,7 +139,6 @@ public class Administration {
         }
     }
 
-    // PLANNING HEBDOMADAIRE
     public void showWeeklyPlanning(String[] weekDates) {
         System.out.println("=== Weekly Planning ===");
         for (int i = 0; i < tripCount; i++) {
@@ -135,9 +151,8 @@ public class Administration {
         }
     }
 
-    // HISTORIQUE DES COURSES
-    public void showtripHistory() {
-        System.out.println("=== trip History ===");
+    public void showTripHistory() {
+        System.out.println("=== Trip History ===");
         for (int i = 0; i < tripCount; i++) {
             if (trips[i] != null && trips[i].isFinished()) {
                 trips[i].showTripInfo();
@@ -145,16 +160,15 @@ public class Administration {
         }
     }
 
-    // CATÉGORIE LA PLUS ACTIVE
     public void mostActiveCategory() {
         int students = 0, teachers = 0, staff = 0;
 
         for (int i = 0; i < tripCount; i++) {
             if (trips[i] != null) {
-                String role = trips[i].getDriver().getRole();
-                if (role.equals("Student")) students++;
-                else if (role.equals("Teacher")) teachers++;
-                else if (role.equals("Staff")) staff++;
+                User driver = trips[i].getDriver();
+                if (driver instanceof Student) students++;
+                else if (driver instanceof Teacher) teachers++;
+                else if (driver instanceof Staff) staff++;
             }
         }
 
@@ -164,14 +178,14 @@ public class Administration {
         else System.out.println("Staff");
     }
 
-    // FACULTÉ LA PLUS ACTIVE
     public void mostActiveFaculty() {
         String[] facs = new String[userCount];
         int[] counts = new int[userCount];
         int n = 0;
 
         for (int i = 0; i < tripCount; i++) {
-            String fac = trips[i].getDriver().getFaculty();
+            User driver = trips[i].getDriver();
+            String fac = driver.getFaculty();
             if (fac == null) continue;
 
             int index = -1;

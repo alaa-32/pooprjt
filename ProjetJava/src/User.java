@@ -11,17 +11,27 @@ public class User {
     private String faculty ;
     private float reputation; // Average of scores
     private List<Rating> ratings; // Received ratings
-    private String role; // Passenger or Driver
+    //private String role; // Passenger or Driver
 
-    public User(String lastName, String firstName, String id, float reputation, String role,String faculty) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.id = id;
-        this.reputation = reputation;
-        this.ratings = new ArrayList<>();
-        this.role = role;
-        this.faculty = faculty;
-    }
+   // 🔹 Constructeur minimal pour les classes filles : Student, Teacher, etc.
+   public User(String id, String name) {
+    this.id = id;
+    this.lastName = name;  // ou tu peux changer "lastName" par "fullName" selon ton besoin
+    this.firstName = "";   // vide si pas fourni
+    this.faculty = "";
+    this.reputation = 0.0f;
+    this.ratings = new ArrayList<>();
+}
+
+// 🔹 Constructeur complet si besoin
+public User(String lastName, String firstName, String id, float reputation, String faculty) {
+    this.lastName = lastName;
+    this.firstName = firstName;
+    this.id = id;
+    this.reputation = reputation;
+    this.faculty = faculty;
+    this.ratings = new ArrayList<>();
+}
 
     public String getLastName() {
         return lastName+ firstName;
@@ -36,14 +46,14 @@ public class User {
         return reputation;
     }
 
-    public String getRole() {
+   /*  public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
-
+*/
      public String getFaculty() {
       return faculty;
   }

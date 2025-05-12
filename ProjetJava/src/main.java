@@ -1,60 +1,80 @@
-public class main {
-  public class MainAdministrationTest {
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
     public static void main(String[] args) {
-        // Création de l'administration avec capacité max de 10 utilisateurs et 10 courses
-        Administration admin = new Administration(10, 10);
+        // === INITIALISATION ===
+        Administration admin = new Administration(20, 20);
+        GestionCourses gestion = new GestionCourses();
+        RatingSystem ratingSystem = new RatingSystem();
 
-        // Création de quelques utilisateurs
-        Student s1 = new Student("Amine", "Boukhatem", "ETU001", 4.5f, "Chauffeur", "Informatique");
-        Student s2 = new Student("Sami", "Benali", "ETU002", 3.0f, "Passager", "Informatique");
-        Teacher t1 = new Teacher("Nadia", "Zerrouki", "ENS001", 4.8f, "Chauffeur", "Mathématiques");
-        Staff a1 = new Staff("Ali", "Kacem", "ATS001", 2.5f, "Chauffeur", "Bibliothèque");
-
-        // Ajout des utilisateurs à l'administration
+        // === CRÉATION D'UTILISATEURS ===
+        Student s1 = new Student("ETU001", "Amine", "Informatique");
+        Student s2 = new Student("ETU002", "Sami", "Physique");
+        Teacher t1 = new Teacher("ENS001", "Nadia", "Mathématiques");
+        Driver d1 = new Driver("DRV001", "Salah", "LIC123");
+        Staff a1 = new Staff("ATS001", "Ali", "Bibliothèque");
+        // Ajout dans l'administration
         admin.addUser(s1);
         admin.addUser(s2);
         admin.addUser(t1);
         admin.addUser(a1);
+        admin.addUser(d1);
 
-        
-        // Création de quelques courses
-       // Course c1 = new Course("2025-05-07", s1); // course avec le student s1 comme chauffeur
-       // Course c2 = new Course("2025-05-08", t1); // course avec l'enseignant t1
-        //Course c3 = new Course("2025-05-07", a1); // course avec ATS
+        // === PRÉFÉRENCES & ITINÉRAIRES ===
+        Preferences prefs1 = new Preferences("mixed", true, true);
+        Preferences prefs2 = new Preferences("mixed", true, false);
+        Itinerary iti1 = new Itinerary("Bab Ezzouar", Arrays.asList("El Harrach", "Ain Naadja"));
+        Itinerary iti2 = new Itinerary("El Harrach", Arrays.asList("Hussein Dey"));
 
-        // Marquer une course comme terminée
-        //c2.setTerminee(true);
+        // === CRÉATION DE COURSES ===
+        gestion.creerCourse(d1, iti1, prefs1, "2025-05-13");
+        gestion.creerCourse(t1, iti2, prefs2, "2025-05-13");
 
-        // Ajout des courses à l'administration
-        //admin.ajouterCourse(c1);
-        //admin.ajouterCourse(c2);
-        //admin.ajouterCourse(c3);  
-       
+        // === AFFICHER COURSES ===
+        System.out.println("\n=== COURSES DISPONIBLES ===");
+        gestion.afficherToutesLesCourses();
 
-        // Afficher les différentes informations
-        admin.showOngoingTrips();
-        admin.showDailyPlanning("2025-05-07");
+        // === RECHERCHE DE COURSE ===
+        System.out.println("\n=== RECHERCHE POUR S1 ===");
+        List<Trip> results = gestion.chercherCourse(s1, iti1, prefs1);
+        if (!results.isEmpty()) {
+            Trip selectedCourse = results.get(0);
+            selectedCourse.addPassenger(s1);
+            selectedCourse.addPassenger(s2);
+            System.out.println("Passagers ajoutés à la course du chauffeur : " + selectedCourse.getDriver().getLastName());
+        }
 
-        String[] semaine = {"2025-05-07", "2025-05-08"};
-        admin.showWeeklyPlanning(semaine);
+        // === MARQUER COMME TERMINÉ ===
+        Trip course = results.get(0);
+        course.markAsFinished();
 
-        admin.showTripHistory();
+        // === AFFICHAGE COURSE ===
+        System.out.println("\n=== INFOS DE LA COURSE TERMINÉE ===");
+        course.showTripInfo();
+
+        // === NOTATION ===
+        ratingSystem.rate(s1, d1, 5, "Excellent trajet !");
+        ratingSystem.rate(s2, d1, 3, "Conduite correcte.");
+        ratingSystem.rate(d1, s1, 4, "Bon passager");
+
+        // === RÉPUTATIONS ===
+        System.out.println("\nRéputation du chauffeur Salah : " + d1.getReputation());
+        System.out.println("Réputation de l'étudiant Amine : " + s1.getReputation());
+
+        // === STATISTIQUES ===
+        System.out.println("\n=== STATISTIQUES ===");
         admin.showStatistics();
         admin.mostActiveCategory();
         admin.mostActiveFaculty();
         admin.top10Drivers();
 
-        // Simulation d'une mauvaise note
-        SystemeEvaluation systeme = new SystemeEvaluation();
-        systeme.passagerEvalueChauffeur(s2, s1, 1, "Conduite dangereuse");
-
+        // === HISTORIQUE / BLACKLIST ===
+        admin.showTripHistory();
         admin.showBlacklist();
+
+        // === BANNIR UTILISATEURS À MAUVAISE RÉPUTATION ===
+        System.out.println("\n=== BANNISSEMENT ===");
         admin.banLowReputationUsers();
     }
-} 
-
-// NB : Les classes Course, Student, Teacher, Staff, Utilisateur, Evaluation, SystemeEvaluation
-// doivent être déjà bien implémentées avec les bons constructeurs et méthodes (setTerminee, getFaculte, etc.).
-
-  
 }

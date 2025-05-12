@@ -1,15 +1,25 @@
-public class Driver {
-  private String name;
-  private String licenseNumber;
+public class Driver extends User implements Role {
+    private String licenseNumber;
 
-  public Driver(String name, String licenseNumber) {
-      this.name = name;
-      this.licenseNumber = licenseNumber;
-  }
+    // ➤ Constructeur complet
+    public Driver(String id, String name, String licenseNumber) {
+        super(id, name);
+        this.licenseNumber = licenseNumber;
+    }
 
-  // Méthode pour créer une course
-  public Trip createTrip(Itinerary itinerary, Preferences preferences, String date) {
-    return new Trip(this, itinerary, preferences, date);
-}
+    // ➤ Constructeur simplifié
+    public Driver(String id, String name) {
+        super(id, name);
+        this.licenseNumber = "UNKNOWN"; // valeur par défaut si non précisée
+    }
 
+    @Override
+    public void displayRoleInfo() {
+        System.out.println("Role: Driver");
+        System.out.println("License Number: " + licenseNumber);
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
 }

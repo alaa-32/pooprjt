@@ -1,26 +1,29 @@
 public class Student extends User implements Role {
-  private String studentId;
-  private String faculty;  // NEW FIELD ADDED
+    private String studentId;
+    private String faculty;
 
-  public Student(String id, String name, String studentId, String faculty) {  // UPDATED CONSTRUCTOR
-      super(id, name);
-      this.studentId = studentId;
-      this.faculty = faculty;  // NEW INITIALIZATION
-  }
+    // ➤ Constructeur complet
+    public Student(String id, String name, String studentId, String faculty) {
+        super(id, name);
+        this.studentId = studentId;
+        this.faculty = faculty;
+    }
 
-  @Override
-  public void displayRoleInfo() {
-      System.out.println("Role: Student");
-      System.out.println("Student ID: " + studentId);
-      System.out.println("Faculty: " + faculty);  // NEW LINE ADDED
-  }
+    // ➤ Constructeur simplifié
+    public Student(String id, String name, String faculty) {
+        super(id, name);
+        this.studentId = id;
+        this.faculty = faculty;
+    }
 
-  // NEW GETTER ADDED
-  public String getFaculty() {
-      return faculty;
-  }
+    @Override
+    public void displayRoleInfo() {
+        System.out.println("Role: Student");
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Faculty: " + faculty);
+    }
 
-  public interface Role {
-      String getRoleName();
-  }
+    public String getFaculty() {
+        return faculty;
+    }
 }
